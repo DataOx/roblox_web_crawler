@@ -1,0 +1,2 @@
+class NotSupportedScraper(Exception):
+    pass
