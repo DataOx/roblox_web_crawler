@@ -18,15 +18,17 @@ GOOGLE_MAX_BACKOFF_TIME = 300  # 5 min
 # Logging
 LOG_CONSOLE = True
 LOG_LEVEL = logging.NOTSET
-LOG_FORMAT = '%(asctime)s %(name)s %(levelname)s: %(message)s'
+LOG_FORMAT_CONSOLE = '[%(name)s/%(levelname)s]: %(message)s'
+LOG_FORMAT_FILE = '%(asctime)s %(name)s %(levelname)s: %(message)s'
 LOG_FILEPATH = os.path.join(STATIC, 'log.out')
 # DATABASES
-POSTGRES_DB = os.environ.get('POSTGRES_DB', '')
+POSTGRES_DB = os.environ.get('POSTGRES_DB', 'test_db')
 POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '')
-POSTGRES_HOST = os.environ.get('DATABASE_HOST', 'localhost')
-POSTGRES_PORT = int(os.environ.get('DATABASE_PORT', 5432))
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
+POSTGRES_PORT = int(os.environ.get('POSTGRES_INTERNAL_PORT', 5432))
 DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
+print(DATABASE_URL)
 # REDIS
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD", "pwdlocal")

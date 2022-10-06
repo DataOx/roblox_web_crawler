@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.7'
 
 services:
   web:
@@ -15,7 +15,7 @@ services:
     expose:
       - "8000"
     depends_on:
-      - db
+      - postgres
 
   celery:
     build:
@@ -43,15 +43,16 @@ services:
     depends_on:
       - web
 
-  db:
+  postgres:
     image: postgres:alpine
     restart: always
-    container_name: roblox_crawler_db
-    hostname: roblox_crawler_psql
-    ports:
-      - "5432:5432"
+    container_name: roblox_crawler_postgres
     env_file:
       - .env
+    ports:
+      - '${POSTGRES_EXTERNAL_PORT}:${POSTGRES_INTERNAL_PORT}'
+    expose:
+      - '${POSTGRES_INTERNAL_PORT}'
     volumes:
       - postgres-data:/var/lib/postgresql/data/
 

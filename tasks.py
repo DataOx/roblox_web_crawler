@@ -30,5 +30,5 @@ def run_scraping_roblox(urls_data: UrlsData):
         os.chmod(LOG_FILEPATH, 0o777)  # permission for writing to file for user
     if urls_data.data:
         print('Running Scraping...')
-        manager = PoolModuleManager(GOOGLE_SPREADSHEET_ID)
+        manager = PoolModuleManager(GOOGLE_SPREADSHEET_ID, saving_db=False)
         manager.run_roblox_scraping(urls_data, requests_delay=0)

@@ -20,10 +20,11 @@ class PoolModuleManager:
     PROXY: Dict[str, str] = None
     spreadsheet_saving_delay: float = 0.01
 
-    def __init__(self, spreadsheet_id: str = None):
+    def __init__(self, spreadsheet_id: str = None, saving_db: bool = True):
         self.spreadsheet_id = spreadsheet_id
         self._sheet_name: str = ''
         self.logger = Logger(self.__class__.__name__)
+        self.saving_db = saving_db
 
     def run_roblox_scraping(self, urls_data: UrlsData, requests_delay: float = 0.25) -> None:
         """
@@ -40,7 +41,8 @@ class PoolModuleManager:
         with RobloxScraper(urls_data, proxy=self.PROXY) as roblox_scraper:
             for roblox_item in roblox_scraper.start_scraping(requests_delay=requests_delay):
                 scraped_data = roblox_item.dict()
-                self.save_to_db(roblox_scraper, **scraped_data)
+                if self.saving_db:
+                    self.save_to_db(roblox_scraper, **scraped_data)
                 if self.spreadsheet_id and roblox_item.row_index > 1 and self._sheet_name:
                     self.extract_product_to_spreadsheet(roblox_item)
                     sheet_saving_delay = self.spreadsheet_saving_delay + randint(0, 1000) / 1000.0
@@ -76,10 +78,10 @@ class PoolModuleManager:
             return
         result = write_data_on_sheet(spreadsheet_id=self.spreadsheet_id, sheet_name=self._sheet_name, data=data,
                                      col_ranges=f'B{item.row_index}:I{item.row_index}')
-        updated_range = result.get('updatedRange', '')
+        updated_range = result['responses'][0].get('updatedRange', "")
         msg = f'spreadsheet ID: {self.spreadsheet_id} SHEET: {self._sheet_name}'
         if updated_range:
-            self.logger.debug('Updated range: ' + updated_range)
+            self.logger.debug(f'SpreadSheet ID: {self.spreadsheet_id} Updated range: {updated_range}')
         else:
             self.logger.warning('Updated range not found in response from google API.\n'
                                 'Need checking result on ' + msg)
