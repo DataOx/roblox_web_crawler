@@ -49,14 +49,15 @@ class PoolModuleManager:
 
     def save_to_db(self, scraper: BaseScraper, **scraper_data) -> BaseModel:
         if scraper.name not in self.SCRAPERS:
-            raise NotSupportedScraper('This scraper {} not supported with this managers for saving to db')
+            raise NotSupportedScraper(
+                'This scraper %s not supported with this managers for saving to db' % scraper.name)
         if not scraper_data:
             raise ValueError('Empty scraped_data for saving to db')
         if scraper.name == 'roblox':
             obj = create_extract_product(**scraper_data)
             self.logger.info('Saved to model ExtractProduct ID: ' + str(obj.id))
             return obj
-        raise ValueError('Not added script for saving to db for scrapper %s' % scraper.name)
+        raise ValueError('Not added script for saving to db for scrapper ' + scraper.name)
 
     def extract_product_to_spreadsheet(self, item: Union[RobloxItem, ExtractProduct]):
         # saving data to spreadsheet
@@ -80,6 +81,6 @@ class PoolModuleManager:
         if updated_range:
             self.logger.debug('Updated range: ' + updated_range)
         else:
-            self.logger.warning('Updated range not found in response from google API. \n'
+            self.logger.warning('Updated range not found in response from google API.\n'
                                 'Need checking result on ' + msg)
         self.logger.debug('Saved data to ' + msg)
