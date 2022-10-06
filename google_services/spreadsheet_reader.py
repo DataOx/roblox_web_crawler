@@ -51,11 +51,3 @@ def get_sheet_data(spreadsheet_id: str, sheet_name: str, col_ranges: str = 'A:Z'
     if major_dimension == 'COLUMNS':
         return columns_dict(values)
     return dimension_unspecified_dict(values)
-
-
-if __name__ == '__main__':
-    c = 0
-    while True:
-        x = get_sheet_data('1AXnIpDgtXLVdqnEfKFjM7bkMgSl5_tQclYWW2LYREiQ', 'Roblox')
-        c += 1
-        print(c)

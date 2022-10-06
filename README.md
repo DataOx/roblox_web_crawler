@@ -1,5 +1,5 @@
 # Roblox Web Crawler 
-![Architecture](https://bitbucket.org/introlabsystems/matthew-kanterman.roblox_web_crawler.scrapers/src/master/static/project_architecture.jpeg?raw=true "Roblox Web Crawler Architecture")
+![Architecture](https://bitbucket.org/introlabsystems/matthew-kanterman.roblox_web_crawler.scrapers/src/master/static/project_architecture.jpeg?raw=true)
 
 ### Useful links
 - [Google Sheets](https://docs.google.com/spreadsheets/d/1AXnIpDgtXLVdqnEfKFjM7bkMgSl5_tQclYWW2LYREiQ)
