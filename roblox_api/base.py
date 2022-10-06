@@ -14,6 +14,7 @@ class RobloxRequestsAPIBase:
 
     def __init__(self, session: Session):
         assert self.API_NAME
+
         self.logger = Logger(self.__class__.__name__)
         self.session = session
         self.base_url = self.BASE_URL.format(self.API_NAME)
@@ -27,6 +28,7 @@ class RobloxRequestsAPIBase:
     def request(self, method: str, path: str = None, **kwargs) -> Any:
         if path.startswith('/'):
             path = path[1:]
+
         request = Request(method, urljoin(self.base_url, path), **kwargs)
         self.process_request(request)
         response = self.session.send(request.prepare())
@@ -45,12 +47,14 @@ class RobloxRequestsAPIBase:
             self.logger.info('429 status code. Waiting {}s...'.format(wait_time))
             time.sleep(wait_time)
             return self.retry_request(response)
+
         try:
             data = response.json()
         except ValueError:
             response.raise_for_status()
         else:
             errors = data.get('errors')
+
             if errors:
                 raise RobloxException(
                     msg='\n'.join([f'{num}. {error["message"]}' for num, error in enumerate(errors, start=1)]),
@@ -103,14 +107,17 @@ class RobloxAPIBase(RobloxRequestsAPIBase):
         self._retries_requests_count += 1
         return retry_request
 
-    def info_count_requests(self, count: int, before_msg: str = None, level: str = 'debug'):
-        if count > 0:
-            msg = f'Requests to Roblox {self.__class__.__name__} Count: {count}'
-            if before_msg:
-                msg = before_msg + ' ' + msg
-            level = level.lower()
-            if hasattr(self.logger, level):
-                getattr(self.logger, level)(msg)
+    def info_count_requests(self, count: int, before_msg: str = None, level: str = 'debug') -> None:
+        if count <= 0:
+            return
+
+        msg = f'Requests to Roblox {self.__class__.__name__} Count: {count}'
+        if before_msg:
+            msg = before_msg + ' ' + msg
+
+        level = level.lower()
+        if hasattr(self.logger, level):
+            getattr(self.logger, level)(msg)
 
     def on_close(self):
         self.info_count_requests(count=self.get_requests_count, before_msg='GET')

@@ -15,7 +15,6 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SERVICE_AC
 def get_spreadsheets_service() -> discovery.build:
     # Authentication
     http_auth = credentials.authorize(httplib2.Http())
-
     spreadsheets_service = discovery.build('sheets', 'v4', http=http_auth, num_retries=3)
     return spreadsheets_service
 

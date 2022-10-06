@@ -6,18 +6,20 @@ from roblox_api.apis import RobloxBadgesAPI, RobloxGamesAPI
 
 
 class TestAPIs(unittest.TestCase):
+    UNIVERSE_ID = '3421293944'
+    GAME_TITLE = 'NIKELAND-ZOOM-FREAK-4'
+
     def setUp(self) -> None:
         self.session = Session()
         self.badges_api = RobloxBadgesAPI(session=self.session)
         self.games_api = RobloxGamesAPI(session=self.session)
-        self.game_title = 'NIKELAND-ZOOM-FREAK-4'
-        self.universe_id = '3421293944'
 
     def test_games_list(self):
-        games_meta_data = self.games_api.get_games_list(keyword=self.game_title)
+        games_meta_data = self.games_api.get_games_list(keyword=self.GAME_TITLE)
         self.assertTrue(games_meta_data)
         self.assertIsNotNone(games_meta_data.get('games'))
         self.assertTrue(games_meta_data.get('games'))
+
         for game_meta in games_meta_data.get('games'):
             self.assertIsNotNone(game_meta.get('name'), msg='not found game name with key "name"')
             self.assertIsNotNone(game_meta.get('creatorId'), msg='not found creator id with key "creatorId"')
@@ -28,6 +30,7 @@ class TestAPIs(unittest.TestCase):
         self.assertTrue(games_info)
         self.assertIsNotNone(games_info.get('data'))
         self.assertTrue(games_info.get('data'))
+
         for game_data in games_info.get('data'):
             self.assertIsNotNone(game_data.get('name'), msg='not found game name with key "name"')
             self.assertIsNotNone(game_data.get('created'), msg='not found creation value with key "created"')
@@ -35,10 +38,11 @@ class TestAPIs(unittest.TestCase):
             self.assertIsNotNone(game_data.get('placeVisits'), msg='not found visits value with key "placeVisits"')
 
     def test_badges_by_universe_id(self):
-        result = self.badges_api.get_badges_by_universe_id(universe_id=self.universe_id)
+        result = self.badges_api.get_badges_by_universe_id(universe_id=self.UNIVERSE_ID)
         self.assertIsNotNone(result)
         badges = result.get('data')
         self.assertIsNotNone(badges)
+
         for badge in badges:
             statistics = badge.get('statistics')
             self.assertIsNotNone(statistics)

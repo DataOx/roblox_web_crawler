@@ -29,23 +29,29 @@ async def spreadsheet_urls(urls: UrlsData) -> SheetResponse:
     """
     valid_urls, invalid_urls = [], []
     added_urls = dict()
+
     for url_item in urls.data:
         # filtering to duplicates key=URL value=row_index
         if url_item.URL in added_urls.keys():
             url_item.message = "Duplicated with value from row " + added_urls[url_item.URL]
             invalid_urls.append(url_item)
             continue
+
         # checking the URL is valid.
         # If it is not, the message will be changed in the body of the is_invalid_roblox_url function.
         if is_invalid_roblox_url(url_item):
             invalid_urls.append(url_item)
         else:
             valid_urls.append(url_item)
+
         added_urls[url_item.URL] = str(url_item.row_index)
+
     response = SheetResponse(status="ok", sheet_name=urls.sheet_name, data=valid_urls + invalid_urls)
     if invalid_urls:
         response.status = "Invalid URLs found"
+
     if valid_urls:
         urls.data = valid_urls
         run_scraping_roblox.delay(urls)
+
     return response

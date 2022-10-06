@@ -14,6 +14,7 @@ def retry_with_backoff(func):
     def wrapper(*args, **kwargs):
         minimum_backoff_time = GOOGLE_MIN_BACKOFF_TIME
         pipe_err_count = 0
+
         while True:
             try:
                 return func(*args, **kwargs)
@@ -28,10 +29,13 @@ def retry_with_backoff(func):
             except HttpError as http_error:
                 if http_error.status_code != 429:
                     raise http_error
+
                 if minimum_backoff_time > GOOGLE_MAX_BACKOFF_TIME:
                     raise http_error
+
                 delay = minimum_backoff_time + randint(0, 1000) / 1000.0
                 logger.warning('Error 429 backoff delay is ' + delay)
                 time.sleep(delay)
                 minimum_backoff_time *= 2
+
     return wrapper

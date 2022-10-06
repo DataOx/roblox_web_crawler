@@ -11,16 +11,7 @@ WORKDIR /app
 COPY ./requirements.txt ./requirements.txt
 RUN pip install --upgrade pip && pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-COPY ./dao ./dao
-COPY ./google_services ./google_services
-COPY managers ./managers
-COPY ./roblox_api ./roblox_api
-COPY ./scrapers ./scrapers
-COPY ./utils ./utils
-COPY ./config.py ./
-COPY ./tasks.py ./
-COPY ./main.py ./
-COPY ./web-runner.sh ./
+COPY . .
 
 RUN useradd crawlercelery
 RUN chown -R crawlercelery:crawlercelery /app

@@ -37,6 +37,7 @@ class RobloxItem:
                 self.message = msg
             else:
                 self.message += '\n' + msg
+
         self._created_at = get_pacific_time()
 
     _default_format = '%Y-%m-%dT%H:%M:%S.%f'
@@ -45,12 +46,11 @@ class RobloxItem:
         if '.' in value:
             split_value = value.split('.')
             value = f'{split_value[0]}.{split_value[1][:6]}'
+
         if value.endswith('Z'):
             value = value[:-1]
-        return datetime.strptime(
-            value,
-            self._default_format if '.' in value else self._default_format.split('.')[0]
-        )
+
+        return datetime.strptime(value, self._default_format if '.' in value else self._default_format.split('.')[0])
 
     @property
     def created_at(self):

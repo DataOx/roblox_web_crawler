@@ -27,6 +27,7 @@ class ScraperSession(BaseScraper):
     def sets_proxies(self, proxy: Dict[str, str] = None) -> None:
         if proxy is None:
             return
+
         self.session.proxies = proxy
 
     def __enter__(self):

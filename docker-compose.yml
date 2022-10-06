@@ -25,7 +25,7 @@ services:
     container_name: roblox_crawler_celery
     env_file:
       - .env
-    command: bash -c "celery -A tasks worker --uid crawlercelery --loglevel INFO"
+    command: bash -c "celery -A tasks worker --uid crawlercelery --loglevel INFO --logfile ./static/celery.log"
     volumes:
       - ./static:/app/static
     depends_on:
