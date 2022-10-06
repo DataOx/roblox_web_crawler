@@ -28,14 +28,10 @@ def retry_with_backoff(func):
             except HttpError as http_error:
                 if http_error.status_code != 429:
                     raise http_error
-                print(http_error.resp)
-                print(http_error.content)
                 if minimum_backoff_time > GOOGLE_MAX_BACKOFF_TIME:
                     raise http_error
                 delay = minimum_backoff_time + randint(0, 1000) / 1000.0
-                msg = 'Error 429 backoff delay is {delay}...'
-                logger.warning(msg)
-                print(f'{logger.name} {msg}')
+                logger.warning('Error 429 backoff delay is ' + delay)
                 time.sleep(delay)
                 minimum_backoff_time *= 2
     return wrapper
