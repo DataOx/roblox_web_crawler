@@ -24,11 +24,10 @@ LOG_FORMAT_CONSOLE = '[%(name)s/%(levelname)s]: %(message)s'  # it will look thr
 
 # DATABASES
 POSTGRES_DB = os.environ.get('POSTGRES_DB', 'test_db')
-POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
+POSTGRES_USER = os.environ.get('POSTGRES_USER', 'root')
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '')
 POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
 POSTGRES_PORT = int(os.environ.get('POSTGRES_INTERNAL_PORT', 5432))
-DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
 
 # REDIS
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")

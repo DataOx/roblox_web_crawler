@@ -1,28 +1,48 @@
-version: '3.7'
+version: '3.9'
 
 services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '${POSTGRES_EXTERNAL_PORT:-5432}:${POSTGRES_INTERNAL_PORT:?err}'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+
   web:
-    restart: unless-stopped
-    container_name: roblox_crawler_web
-    build:
-      context: .
-      dockerfile: Dockerfile
+    container_name: crawler_web
+    build: .
     entrypoint: ./web-runner.sh
     env_file:
       - .env
     volumes:
       - ./static:/app/static
+    links:
+      - postgres:postgres
     expose:
       - "8000"
     depends_on:
       - postgres
 
-  celery:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  redis:
+    image: 'redis:alpine'
     restart: always
-    container_name: roblox_crawler_celery
+    container_name: crawler_redis
+    hostname: crawler_redis
+    env_file:
+      - .env
+    command: redis-server --requirepass ${REDIS_PASSWORD:?err}
+    expose:
+      - "6379"
+    volumes:
+      - redis-data:/data
+
+  celery:
+    build: .
+    restart: always
+    container_name: crawler_celery
     env_file:
       - .env
     command: bash -c "celery -A tasks worker --uid crawlercelery --loglevel INFO --logfile ./static/celery.log"
@@ -35,7 +55,7 @@ services:
   nginx:
     image: nginx:alpine
     restart: unless-stopped
-    container_name: roblox_crawler_web_nginx
+    container_name: crawler_nginx
     ports:
       - "80:80"
     volumes:
@@ -43,32 +63,6 @@ services:
     depends_on:
       - web
 
-  postgres:
-    image: postgres:alpine
-    restart: always
-    container_name: roblox_crawler_postgres
-    env_file:
-      - .env
-    ports:
-      - '${POSTGRES_EXTERNAL_PORT}:${POSTGRES_INTERNAL_PORT}'
-    expose:
-      - '${POSTGRES_INTERNAL_PORT}'
-    volumes:
-      - postgres-data:/var/lib/postgresql/data/
-
-  redis:
-    image: 'redis:alpine'
-    restart: always
-    container_name: roblox_crawler_redis
-    hostname: roblox_crawler_redis
-    env_file:
-      - .env
-    command: redis-server --requirepass ${REDIS_PASSWORD:?err}
-    expose:
-      - "6379"
-    volumes:
-      - redis-data:/data
-
 volumes:
-  postgres-data:
   redis-data:
+  postgres-data:
