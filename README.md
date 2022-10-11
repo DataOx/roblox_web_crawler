@@ -64,5 +64,5 @@ docker-compose logs -f
 ```
 Celery shell
 ```bash
-docker-compose -f docker-compose-dev.yml exec web celery shell
+docker-compose exec celery celery shell
 ```
