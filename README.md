@@ -1,4 +1,8 @@
 # Roblox Web Crawler 
+Scraper associated with google sheet via API endpoint, which receives url addresses and starts the process of scraping certain data on roblox games
+
+## Architecture
+![alt text](./static/project_architecture.jpeg)
 
 ### Useful links
 - [Google Sheets](https://docs.google.com/spreadsheets/d/1AXnIpDgtXLVdqnEfKFjM7bkMgSl5_tQclYWW2LYREiQ)
@@ -66,3 +70,5 @@ Celery shell
 ```bash
 docker-compose exec celery celery shell
 ```
+---
+> :warning: **Attention!** If AppScript is required for google sheet, it is in static file
