@@ -1,5 +1,5 @@
 # Roblox Web Crawler 
-This is a web crawler that scrapes endpoints for different companies from the website roblox.com.
+Current application is the scraper that scrapes endpoints for companies from the website roblox.com.
 Scraper associated with GoogleSheet via API endpoint, which receives URL addresses and starts the process of scraping certain data on Roblox games.
 
 ## Architecture
